@@ -1,0 +1,142 @@
+# ссылка: t.me/AbMult_bot
+
+# токен: 8341829750:AAE1yqYGmjM00242hLQg1Dsn2L1-gmBaruQ
+!pip3 install pytelegrambotapi
+
+
+from random import *
+import telebot
+from telebot import types
+from urllib.request import urlopen
+
+
+nasvpoform = False
+inasvpoform = 0
+
+matching = False
+imatch1 = 0
+imatch2 = 0
+
+from telebot import types
+bot = telebot.TeleBot('8341829750:AAE1yqYGmjM00242hLQg1Dsn2L1-gmBaruQ')
+
+@bot.message_handler(commands=["start"])
+def start(message):
+  bot.send_message(message.chat.id,  'Привет! Это - бот, который поможет тебе наконец выучить формулы сокращённого умножения. \n/theory - теория по основным ФСУ \n/train - задания для тренировки \n/autor - обратная связь с автором ')
+
+@bot.message_handler(commands=["autor"])
+def autor(message):
+  bot.send_message(message.chat.id,'Если есть какие-либо пожелания/замечания/предложения - пиши на почту: \n<b>abmultbot@gmail.com</b>', parse_mode='HTML')
+
+
+fsu = ['a² - b² = (a - b)(a + b)', '(a + b)² = a² + 2ab + b²', '(a - b)² = a² - 2ab + b²','a³ + b³ = (a + b)(a² - ab + b²)','a³ - b³ = (a - b)(a² + ab + b²)','(a + b)³ = a³ + 3a²b + 3ab² + b³', '(a - b)³ = a³ - 3a²b + 3ab² - b³']
+names = ['Разность квадратов','Квадрат суммы','Квадрат разности','Сумма кубов','Разность кубов','Куб суммы','Куб разности']
+
+
+@bot.message_handler(commands=["train"])
+def train(message):
+  kb = types.InlineKeyboardMarkup(row_width=1)
+  b1 = types.InlineKeyboardButton(text='Название по формуле', callback_data= 'т1')
+  b3 = types.InlineKeyboardButton(text='Подходит ли?', callback_data='т2')
+  kb.add(b1, b3)
+  bot.send_message(message.chat.id,  'Выбери тип вопросов:', reply_markup=kb)
+
+
+@bot.message_handler(commands=["theory"])
+def theory(message):
+  kb = types.InlineKeyboardMarkup(row_width=1)
+  b1 = types.InlineKeyboardButton(text='Разность квадратов', callback_data= 'ф1')
+  b2 = types.InlineKeyboardButton(text='Квадрат суммы', callback_data='ф2')
+  b3 = types.InlineKeyboardButton(text='Квадрат разности', callback_data='ф3')
+  b4 = types.InlineKeyboardButton(text='Сумма кубов', callback_data='ф4')
+  b5 = types.InlineKeyboardButton(text='Разность кубов', callback_data='ф5')
+  b6 = types.InlineKeyboardButton(text='Куб суммы', callback_data='ф6')
+  b7 = types.InlineKeyboardButton(text='Куб разности', callback_data='ф7')
+  kb.add(b1, b2, b3, b4, b5, b6, b7)
+  bot.send_message(message.chat.id,  'Выбери формулу для изучения:', reply_markup=kb)
+
+
+fsu1 = ['a² - b²', '(a + b)²', '(a - b)²','a³ + b³','a³ - b³','(a + b)³', '(a - b)³']
+fsu2 = ['(a - b)(a + b)', 'a² + 2ab + b²','a² - 2ab + b²','(a + b)(a² - ab + b²)','(a - b)(a² + ab + b²)','a³ + 3a²b + 3ab² + b³', 'a³ - 3a²b + 3ab² - b³']
+part1 = 0
+part2 = 0
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_inline(call):
+    global nasvpoform
+    global inasvpoform
+    global matching
+    global imatch1
+    global imatch2
+    global part1
+    global part2
+    if call.data == 'ф1':
+      #bot.delete_message(call.message.chat.id, call.message_id)
+      photo1 = urlopen('https://i127.fastpic.org/big/2026/0216/03/29127ed2b0adeea3d63046e9a44a2f03.png')
+      bot.send_photo(call.message.chat.id, photo1)
+      bot.send_message(call.message.chat.id, '<b><u>Разность квадратов</u></b> \n <blockquote><i>Разность  квадратов  двух  выражений  равна  произведению  разности  этих  выражений  и  их  суммы.</i></blockquote> \nРассмотрим  частный  случай,  когда  в  произведении  двух  многочленов  один  из  них  представляет  собой  разность  двух  выражений,  а  другой  —  их  сумму.\n\nИмеем: \n   <b>(a − b)(a + b) = a² + ab - ba - b²</b> \n\nПриведём подобные члены: \n   <b>a² <u>+ ab</u> <u>- ba</u> - b² = a² - b²</b> \n\nПолучили  тождество: \n   <b>a² − b² = (a − b)(a + b)</b>', parse_mode='HTML')
+    if call.data == 'ф2':
+      photo2 = urlopen('https://i127.fastpic.org/big/2026/0216/59/8bfe9b202095a5cd467fc06534867e59.png')
+      bot.send_photo(call.message.chat.id, photo2)
+      bot.send_message(call.message.chat.id, '<b><u>Квадрат суммы</u></b> \n <blockquote><i>Квадрат  суммы  двух  выражений  равен  квадрату  первого  выражения  плюс  удвоенное  произведение  первого  и  второго  выражений  плюс  квадрат  второго  выражения.</i></blockquote> \nПреобразуем  в  многочлен  выражение (a + b)².  \nИмеем: \n   <b>(a + b)² = (a + b)(a + b) </b> \n\nРакроем скобки и приведём подобные члены: \n   <b>(a + b)(a + b) = a² <u>+ ab</u> <u>+ ab</u> + b² = a² + 2ab + b²</b> \n\nПолучили  тождество: \n   <b>(a + b)² = a² + 2ab + b²</b>', parse_mode='HTML')
+    if call.data == 'ф3':
+      photo3 = urlopen('https://i127.fastpic.org/big/2026/0216/86/5b626f203c69876eaa383cbd53a79a86.png')
+      bot.send_photo(call.message.chat.id, photo3)
+      bot.send_message(call.message.chat.id, '<b><u>Квадрат разности</u></b> \n <blockquote><i>Квадрат  разности  двух  выражений  равен  квадрату  первого  выражения  минус  удвоенное  произведение  первого  и  второго  выражений  плюс  квадрат  второго  выражения.</i></blockquote> \n Преобразуем в многочлен выражение (a - b)². \nИмеем: \n   <b>(a - b)² = (a - b)(a - b) </b> \n\nРакроем скобки и приведём подобные члены: \n   <b>(a - b)(a - b) = a² <u>- ab</u> <u>- ab</u> + b² = a² - 2ab + b²</b> \n\nПолучили  тождество: \n   <b>(a - b)² = a² - 2ab + b²</b>', parse_mode='HTML')
+    if call.data == 'ф4':
+      photo4 = urlopen('https://i127.fastpic.org/big/2026/0216/56/314375c5ab78ea1b7848f7dabec51d56.png')
+      bot.send_photo(call.message.chat.id, photo4)
+      bot.send_message(call.message.chat.id, '<b><u>Сумма кубов</u></b> \n <blockquote><i>Сумма  кубов  двух  выражений  равна  произведению  суммы  этих  выражений  и  неполного  квадрата  их  разности.</i></blockquote> \nУмножим  двучлен a + b на трёхчлен a² - ab + b². \n\nИмеем: \n   <b>(a + b)(a² - ab + b²) = a³ - a²b + ab² + ba² - ab² + b³</b> \n\nПриведём подобные члены: \n   <b>a³ <u>- a²b</u> <s><u>+ ab²</u></s> <u>+ ba²</u> <s><u>- ab²</u></s> + b³ = a³ + b³ \n</b> \nПолучили  тождество: \n   <b>a³ + b³ = (a + b)(a² - ab + b²)</b>', parse_mode='HTML')
+    if call.data == 'ф5':
+      photo5 = urlopen('https://i127.fastpic.org/big/2026/0216/3b/f6879b98b6363b3de9eac8bf870c343b.png')
+      bot.send_photo(call.message.chat.id, photo5)
+      bot.send_message(call.message.chat.id, '<b><u>Разность кубов</u></b> \n <blockquote><i>Разность  кубов  двух  выражений  равна  произведению  разности  этих  выражений  и  неполного  квадрата  их  суммы.</i></blockquote> \nПредставим разность a³ - b³ как сумму a³ + (-b)³. Разложим на множители полученное выражение по формуле "Сумма кубов". \n\nИмеем: \n   <b>(a + (-b))(a² - a(-b) + (-b)²)</b> \n\nРаскроем скобки вокруг b: \n   <b>(a + (-b))(a² - a(-b) + (-b)²) = (a - b)(a² + ab + b²) \n</b> \nПолучили  тождество: \n   <b>a³ + b³ = (a + b)(a² - ab + b²)</b>', parse_mode='HTML')
+    if call.data == 'ф6':
+      photo6 = urlopen('https://i127.fastpic.org/big/2026/0216/71/07f6f1de3eb3d28c72553748ba8e6471.png')
+      bot.send_photo(call.message.chat.id, photo6)
+      bot.send_message(call.message.chat.id, '<b><u>Куб суммы</u></b> \n <blockquote><i>Куб суммы двух чисел равен кубу первого числа плюс утроенное произведение квадрата первого числа на второе плюс утроенное произведение первого числа на квадрат второго плюс куб второго числа.</i></blockquote> \nРассмотрим куб суммы (a + b)³ как произведение квадрата и выражения (a + b)²(a + b). \nИмеем: \n   <b>(a + b)²(a + b) = (a² + 2ab + b²)(a + b)</b> \n\nРаскроем скобки и приведём подобные члены: \n   <b>(a² + 2ab + b²)(a + b) = a³ <u>+ a²b</u> <u>+ 2a²b</u> <s><u>+ 2ab²</u></s> <s><u>+ b²a</u></s> + b³ = a³ + 3a²b + 3ab² + b³</b> \n\nПолучили  тождество: \n   <b>(a + b)³ = a³ + 3a²b + 3ab² + b³</b>', parse_mode='HTML')
+    if call.data == 'ф7':
+      photo7 = urlopen('https://i127.fastpic.org/big/2026/0216/40/7962b6f407a5f276073151efa4009d40.png')
+      bot.send_photo(call.message.chat.id, photo7)
+      bot.send_message(call.message.chat.id, '<b><u>Куб разности</u></b> \n <blockquote><i>Куб разности двух чисел равен кубу первого числа минус утроенное произведение квадрата первого числа на второе плюс утроенное произведение первого числа и квадрата второго минус куб второго числа.</i></blockquote> \nРассмотрим куб разности (a - b)³ как произведение квадрата и выражения (a - b)²(a - b). \nИмеем: \n   <b>(a - b)²(a - b) = (a² - 2ab + b²)(a - b)</b> \n\nРаскроем скобки и приведём подобные члены: \n   <b>(a² - 2ab + b²)(a - b) = a³ <u>-a²b</u> <u>- 2a²b</u> <s><u>+ 2ab²</u></s> <s><u>+ b²a</u></s> - b³ = a³ - 3a²b + 3ab² - b³</b> \n\nПолучили  тождество: \n   <b>(a - b)³ = a³ - 3a²b + 3ab² - b³</b>', parse_mode='HTML')
+    if call.data == 'т1':
+      bot.send_message(call.message.chat.id, 'Как называется формула? Пиши с большой буквы и без пробелов в начале и в конце')
+      fsushka = choice(fsu)
+      inasvpoform = fsu.index(fsushka)
+      bot.send_message(call.message.chat.id, fsushka)
+      nasvpoform = True
+    if call.data == 'т2':
+      part1 = choice(fsu1)
+      imatch1 = fsu1.index(part1)
+      part2 = choice(fsu2)
+      imatch2 = fsu2.index(part2)
+      bot.send_message(call.message.chat.id, part1 + ' = ' + part2)
+      matching = True
+      keyboard = types.ReplyKeyboardMarkup()
+      option_1 = types.KeyboardButton(text='Да')
+      option_2 = types.KeyboardButton(text='Нет')
+      keyboard.add(option_1,option_2)
+      bot.send_message(call.message.chat.id, 'Верно ли тождество?', reply_markup=keyboard)
+
+
+
+@bot.message_handler(content_types = ['text'])
+def hadle_text(message):
+    global nasvpoform
+    global matching
+    if nasvpoform == True:
+      if message.text == names[inasvpoform]:
+        bot.send_message(message.chat.id, 'Правильно!')
+      else:
+        bot.send_message(message.chat.id, 'Неправильно! Это ' + names[inasvpoform])
+      nasvpoform = False
+    if matching == True:
+      keyboard = telebot.types.ReplyKeyboardRemove()
+      if (imatch1 == imatch2 and message.text == ('Да')) or (imatch1 != imatch2 and message.text == ('Нет')):
+        bot.send_message(message.chat.id, 'Правильно!', reply_markup=keyboard)
+      if (imatch1 == imatch2 and message.text == ('Нет')) or (imatch1 != imatch2 and message.text == ('Да')):
+        bot.send_message(message.chat.id, 'Неправильно! Должно быть ' + str(part1) + ' = ' + fsu2[imatch1], reply_markup=keyboard)
+
+
+
+bot.infinity_polling()
